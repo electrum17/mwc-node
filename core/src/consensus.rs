@@ -62,6 +62,11 @@ pub const WEEK_HEIGHT: u64 = 7 * DAY_HEIGHT;
 /// A year is 524_160 blocks
 pub const YEAR_HEIGHT: u64 = 52 * WEEK_HEIGHT;
 
+/// C29 hard fork height
+pub const C29_HF_HEIGHT: u64 = 420_000;
+/// C29 hard fork height (floonet)
+pub const C29_FLOONET_HF_HEIGHT: u64 = 533_000;
+
 /// Number of blocks before a coinbase matures and can be spent
 pub const COINBASE_MATURITY: u64 = DAY_HEIGHT;
 
@@ -72,7 +77,11 @@ pub const COINBASE_MATURITY: u64 = DAY_HEIGHT;
 /// approximately 1 year after grin) and we also make it go to 0
 /// over the course of 1 year. This will roughly keep us inline with grin.
 pub fn secondary_pow_ratio(height: u64) -> u64 {
-	45u64.saturating_sub(height / (YEAR_HEIGHT / 45))
+	if height < get_c29d_hard_fork_block_height() {
+		45u64.saturating_sub(height / (YEAR_HEIGHT / 45))
+	} else {
+		100
+	}
 }
 
 /// The AR scale damping factor to use. Dependent on block height
@@ -140,8 +149,10 @@ pub const MAX_BLOCK_WEIGHT: usize = 40_000;
 pub fn header_version(height: u64) -> HeaderVersion {
 	if height < get_c31_hard_fork_block_height() {
 		HeaderVersion(1)
-	} else {
+	} else if height < get_c29d_hard_fork_block_height() {
 		HeaderVersion(2)
+	} else {
+		HeaderVersion(3)
 	}
 }
 
@@ -150,8 +161,10 @@ pub fn header_version(height: u64) -> HeaderVersion {
 pub fn valid_header_version(height: u64, version: HeaderVersion) -> bool {
 	if height < get_c31_hard_fork_block_height() {
 		version == HeaderVersion(1)
-	} else {
+	} else if height < get_c29d_hard_fork_block_height() {
 		version == HeaderVersion(2)
+	} else {
+		version == HeaderVersion(3)
 	}
 }
 
@@ -359,6 +372,14 @@ fn get_c31_hard_fork_block_height() -> u64 {
 		270_000
 	} else {
 		202_500
+	}
+}
+
+fn get_c29d_hard_fork_block_height() -> u64 {
+	if global::is_floonet() {
+		C29_FLOONET_HF_HEIGHT
+	} else {
+		C29_HF_HEIGHT
 	}
 }
 

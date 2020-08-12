@@ -483,17 +483,17 @@ fn test_secondary_pow_ratio() {
 		assert_eq!(secondary_pow_ratio(three_weeks), 43);
 
 		let one_year = one_week * 52;
-		assert_eq!(secondary_pow_ratio(one_year), 0);
+		assert_eq!(secondary_pow_ratio(532_000), 100);
 
 		let ninety_one_weeks = one_week * 91;
-		assert_eq!(secondary_pow_ratio(ninety_one_weeks - 1), 0);
-		assert_eq!(secondary_pow_ratio(ninety_one_weeks), 0);
-		assert_eq!(secondary_pow_ratio(ninety_one_weeks + 1), 0);
+		assert_eq!(secondary_pow_ratio(ninety_one_weeks - 1), 100);
+		assert_eq!(secondary_pow_ratio(ninety_one_weeks), 100);
+		assert_eq!(secondary_pow_ratio(ninety_one_weeks + 1), 100);
 
 		let two_year = one_year * 2;
-		assert_eq!(secondary_pow_ratio(two_year - 1), 0);
-		assert_eq!(secondary_pow_ratio(two_year), 0);
-		assert_eq!(secondary_pow_ratio(two_year + 1), 0);
+		assert_eq!(secondary_pow_ratio(two_year - 1), 100);
+		assert_eq!(secondary_pow_ratio(two_year), 100);
+		assert_eq!(secondary_pow_ratio(two_year + 1), 100);
 	}
 
 	// Tests for testnet4 chain type (covers pre and post hardfork).
@@ -525,17 +525,17 @@ fn test_secondary_pow_ratio() {
 		assert_eq!(secondary_pow_ratio(t4_fork_height + 1), 40);
 
 		let one_year = one_week * 52;
-		assert_eq!(secondary_pow_ratio(one_year), 0);
+		assert_eq!(secondary_pow_ratio(534_000), 100);
 
 		let ninety_one_weeks = one_week * 91;
-		assert_eq!(secondary_pow_ratio(ninety_one_weeks - 1), 0);
-		assert_eq!(secondary_pow_ratio(ninety_one_weeks), 0);
-		assert_eq!(secondary_pow_ratio(ninety_one_weeks + 1), 0);
+		assert_eq!(secondary_pow_ratio(ninety_one_weeks - 1), 100);
+		assert_eq!(secondary_pow_ratio(ninety_one_weeks), 100);
+		assert_eq!(secondary_pow_ratio(ninety_one_weeks + 1), 100);
 
 		let two_year = one_year * 2;
-		assert_eq!(secondary_pow_ratio(two_year - 1), 0);
-		assert_eq!(secondary_pow_ratio(two_year), 0);
-		assert_eq!(secondary_pow_ratio(two_year + 1), 0);
+		assert_eq!(secondary_pow_ratio(two_year - 1), 100);
+		assert_eq!(secondary_pow_ratio(two_year), 100);
+		assert_eq!(secondary_pow_ratio(two_year + 1), 100);
 	}
 }
 
@@ -568,7 +568,7 @@ fn test_secondary_pow_scale() {
 				2 * YEAR_HEIGHT * 83 / 90,
 				&(0..window).map(|_| hi.clone()).collect::<Vec<_>>()
 			),
-			13
+			100
 		);
 		// same as above, testing lowest bound
 		let mut low_hi =
@@ -626,9 +626,9 @@ fn hard_forks() {
 		global::set_mining_mode(global::ChainTypes::Mainnet);
 		assert_eq!(global::is_floonet(), false);
 		assert!(valid_header_version(0, HeaderVersion(1)));
-		assert!(valid_header_version(YEAR_HEIGHT, HeaderVersion(2)));
-		assert!(valid_header_version(YEAR_HEIGHT * 10, HeaderVersion(2)));
-		assert!(valid_header_version(YEAR_HEIGHT * 100, HeaderVersion(2)));
+		assert!(valid_header_version(YEAR_HEIGHT, HeaderVersion(3)));
+		assert!(valid_header_version(YEAR_HEIGHT * 10, HeaderVersion(3)));
+		assert!(valid_header_version(YEAR_HEIGHT * 100, HeaderVersion(3)));
 	}
 	// Tests for floonet chain type.
 	{
@@ -636,7 +636,7 @@ fn hard_forks() {
 		assert_eq!(global::is_floonet(), true);
 		assert!(valid_header_version(0, HeaderVersion(1)));
 		assert!(valid_header_version(YEAR_HEIGHT, HeaderVersion(2)));
-		assert!(valid_header_version(YEAR_HEIGHT * 10, HeaderVersion(2)));
-		assert!(valid_header_version(YEAR_HEIGHT * 100, HeaderVersion(2)));
+		assert!(valid_header_version(YEAR_HEIGHT * 10, HeaderVersion(3)));
+		assert!(valid_header_version(YEAR_HEIGHT * 100, HeaderVersion(3)));
 	}
 }
